@@ -1,0 +1,66 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Structure to represent an item
+struct Item {
+    int value;
+    int weight;
+};
+
+// Function to compare items based on value per unit weight (value/weight ratio)
+int compare(const void *a, const void *b) {
+    double ratio1 = (double)((struct Item *)a)->value / ((struct Item *)a)->weight;
+    double ratio2 = (double)((struct Item *)b)->value / ((struct Item *)b)->weight;
+    return (ratio2 > ratio1) - (ratio2 < ratio1); // Sort in descending order
+}
+
+// Function to solve fractional knapsack using greedy approach
+double fractional_knapsack(int capacity, struct Item items[], int n) {
+    // Sort items based on value/weight ratio
+    qsort(items, n, sizeof(items[0]), compare);
+
+    double total_value = 0.0; // Total value in knapsack
+
+    // Traverse through sorted items and fill the knapsack
+    for (int i = 0; i < n; i++) {
+        if (capacity <= 0)
+            break;
+
+        // Take the whole item if it fits completely
+        if (items[i].weight <= capacity) {
+            total_value += items[i].value;
+            capacity -= items[i].weight;
+        }
+        // Otherwise take the fraction that fits
+        else {
+            total_value += items[i].value * ((double)capacity / items[i].weight);
+            capacity = 0;
+        }
+    }
+
+    return total_value;
+}
+
+int main() {
+    int capacity, n;
+
+    printf("Enter the capacity of knapsack: ");
+    scanf("%d", &capacity);
+
+    printf("Enter the number of items: ");
+    scanf("%d", &n);
+
+    struct Item items[n];
+
+    printf("Enter the value and weight of each item:\n");
+    for (int i = 0; i < n; i++) {
+        printf("Item %d: ", i + 1);
+        scanf("%d %d", &items[i].value, &items[i].weight);
+    }
+
+    double max_value = fractional_knapsack(capacity, items, n);
+
+    printf("Maximum value in knapsack = %.2f\n", max_value);
+
+    return 0;
+}
