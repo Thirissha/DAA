@@ -1,0 +1,62 @@
+#include <stdio.h>
+
+// Structure to hold both min and max values
+struct Pair {
+    int min;
+    int max;
+};
+
+// Function to find the minimum and maximum values using Divide and Conquer
+struct Pair find_min_max(int arr[], int left, int right) {
+    struct Pair result, left_pair, right_pair;
+    int mid;
+
+    // Base case: If the list has only one element
+    if (left == right) {
+        result.min = arr[left];
+        result.max = arr[left];
+        return result;
+    }
+
+    // If there are two elements
+    if (right == left + 1) {
+        if (arr[left] > arr[right]) {
+            result.max = arr[left];
+            result.min = arr[right];
+        } else {
+            result.max = arr[right];
+            result.min = arr[left];
+        }
+        return result;
+    }
+
+    // If more than two elements, divide the array and recursively find min and max
+    mid = (left + right) / 2;
+    left_pair = find_min_max(arr, left, mid);
+    right_pair = find_min_max(arr, mid + 1, right);
+
+    // Compare min and max from two halves
+    if (left_pair.min < right_pair.min)
+        result.min = left_pair.min;
+    else
+        result.min = right_pair.min;
+
+    if (left_pair.max > right_pair.max)
+        result.max = left_pair.max;
+    else
+        result.max = right_pair.max;
+
+    return result;
+}
+
+int main() {
+    int arr[] = {1000, 11, 445, 1, 330, 3000};
+    int size = sizeof(arr) / sizeof(arr[0]);
+
+    struct Pair result = find_min_max(arr, 0, size - 1);
+
+    printf("Minimum element in the array: %d\n", result.min);
+    printf("Maximum element in the array: %d\n", result.max);
+
+    return 0;
+}
