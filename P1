@@ -1,0 +1,37 @@
+#include <stdio.h>
+
+// Function to compute the nth Fibonacci number using recursion
+int fibonacci(int n) {
+    if (n <= 0) {
+        return -1;  // Invalid input case
+    } else if (n == 1) {
+        return 0;
+    } else if (n == 2) {
+        return 1;
+    } else {
+        return fibonacci(n - 1) + fibonacci(n - 2);
+    }
+}
+
+// Function to print the Fibonacci series up to the specified number of terms
+void print_fibonacci_series(int terms) {
+    printf("Fibonacci Series:\n");
+    for (int i = 1; i <= terms; i++) {
+        printf("%d ", fibonacci(i));
+    }
+    printf("\n");
+}
+
+int main() {
+    int terms;
+    printf("Enter the number of terms: ");
+    scanf("%d", &terms);
+
+    if (terms <= 0) {
+        printf("Input should be a positive integer.\n");
+    } else {
+        print_fibonacci_series(terms);
+    }
+
+    return 0;
+}
