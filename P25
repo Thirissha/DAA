@@ -1,0 +1,80 @@
+#include <stdio.h>
+#include <limits.h>
+
+#define MAX_N 15 // Maximum number of cities, adjust as needed
+
+// Number of cities
+int n;
+
+// Adjacency matrix representing the distances between cities
+int dist[MAX_N][MAX_N];
+
+// DP table to store minimum cost
+int dp[MAX_N][1 << MAX_N];
+
+// Function to solve TSP using Dynamic Programming
+int tsp(int mask, int pos) {
+    // If all cities have been visited, return the cost of returning to the starting city
+    if (mask == (1 << n) - 1) {
+        return dist[pos][0];
+    }
+
+    // If this state has already been computed
+    if (dp[pos][mask] != -1) {
+        return dp[pos][mask];
+    }
+
+    // Initialize minimum cost to a large value
+    int min_cost = INT_MAX;
+
+    // Try to go to every other city
+    for (int city = 0; city < n; city++) {
+        // Check if city 'city' is not visited
+        if (!(mask & (1 << city))) {
+            // Recur for the remaining cities
+            int new_cost = dist[pos][city] + tsp(mask | (1 << city), city);
+
+            // Update minimum cost
+            if (new_cost < min_cost) {
+                min_cost = new_cost;
+            }
+        }
+    }
+
+    // Memoize the computed result
+    return dp[pos][mask] = min_cost;
+}
+
+int main() {
+    // Example adjacency matrix (distance between cities)
+    // Modify this matrix as needed for different sets of cities and distances
+    n = 4; // Number of cities
+    int example_dist[MAX_N][MAX_N] = {
+        {0, 10, 15, 20},
+        {10, 0, 35, 25},
+        {15, 35, 0, 30},
+        {20, 25, 30, 0}
+    };
+
+    // Copy example distances to global dist array
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            dist[i][j] = example_dist[i][j];
+        }
+    }
+
+    // Initialize DP table with -1 (unvisited state)
+    for (int i = 0; i < MAX_N; i++) {
+        for (int j = 0; j < (1 << MAX_N); j++) {
+            dp[i][j] = -1;
+        }
+    }
+
+    // Start TSP from city 0 (assuming 0-based index)
+    int min_cost = tsp(1, 0); // Start with mask 1 (city 0 visited)
+
+    // Print the minimum cost
+    printf("Minimum cost of the Traveling Salesman Problem is: %d\n", min_cost);
+
+    return 0;
+}
