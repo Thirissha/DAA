@@ -1,0 +1,64 @@
+#include <stdio.h>
+
+#define ROW1 3     // Number of rows in matrix 1
+#define COL1 3     // Number of columns in matrix 1
+#define ROW2 3     // Number of rows in matrix 2
+#define COL2 3     // Number of columns in matrix 2
+
+// Function to multiply two matrices
+void multiply_matrices(int mat1[ROW1][COL1], int mat2[ROW2][COL2], int result[ROW1][COL2]) {
+    int i, j, k;
+
+    // Initialize result matrix with zeros
+    for (i = 0; i < ROW1; i++) {
+        for (j = 0; j < COL2; j++) {
+            result[i][j] = 0;
+        }
+    }
+
+    // Perform matrix multiplication
+    for (i = 0; i < ROW1; i++) {
+        for (j = 0; j < COL2; j++) {
+            for (k = 0; k < COL1; k++) {
+                result[i][j] += mat1[i][k] * mat2[k][j];
+            }
+        }
+    }
+}
+
+// Function to print a matrix
+void print_matrix(int mat[ROW1][COL2]) {
+    for (int i = 0; i < ROW1; i++) {
+        for (int j = 0; j < COL2; j++) {
+            printf("%d\t", mat[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+int main() {
+    int matrix1[ROW1][COL1] = {{1, 2, 3},
+                               {4, 5, 6},
+                               {7, 8, 9}};
+
+    int matrix2[ROW2][COL2] = {{9, 8, 7},
+                               {6, 5, 4},
+                               {3, 2, 1}};
+
+    int result_matrix[ROW1][COL2];
+
+    // Multiply matrices
+    multiply_matrices(matrix1, matrix2, result_matrix);
+
+    // Print matrices
+    printf("Matrix 1:\n");
+    print_matrix(matrix1);
+
+    printf("Matrix 2:\n");
+    print_matrix(matrix2);
+
+    printf("Resultant Matrix:\n");
+    print_matrix(result_matrix);
+
+    return 0;
+}
