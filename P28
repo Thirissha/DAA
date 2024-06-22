@@ -1,0 +1,44 @@
+#include <stdio.h>
+
+// Function to calculate factorial of a number
+unsigned long long factorial(int n) {
+    if (n <= 1)
+        return 1;
+    else
+        return n * factorial(n - 1);
+}
+
+// Function to calculate binomial coefficient C(n, k)
+unsigned long long binomial_coefficient(int n, int k) {
+    return factorial(n) / (factorial(k) * factorial(n - k));
+}
+
+// Function to print Pascal's Triangle
+void print_pascal_triangle(int n) {
+    for (int row = 0; row < n; row++) {
+        // Print spaces for formatting
+        for (int space = 0; space < n - row - 1; space++) {
+            printf(" ");
+        }
+
+        // Calculate and print values for current row
+        for (int col = 0; col <= row; col++) {
+            unsigned long long coef = binomial_coefficient(row, col);
+            printf("%llu ", coef);
+        }
+
+        printf("\n");
+    }
+}
+
+int main() {
+    int n;
+
+    printf("Enter the number of rows for Pascal's Triangle: ");
+    scanf("%d", &n);
+
+    // Print Pascal's Triangle with n rows
+    print_pascal_triangle(n);
+
+    return 0;
+}
