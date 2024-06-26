@@ -1,0 +1,31 @@
+#include <stdio.h>
+
+// Function to calculate binomial coefficient C(n, k) using Dynamic Programming
+unsigned long long binomial_coefficient(int n, int k) {
+    // We only need to store the previous row of values
+    unsigned long long C[k+1];
+    for (int i = 0; i <= k; i++)
+        C[i] = 0;
+
+    C[0] = 1;  // C(0, 0) = 1
+
+    for (int i = 1; i <= n; i++) {
+        // Compute next row of Pascal's Triangle using the previous row
+        for (int j = k; j > 0; j--)
+            C[j] = C[j] + C[j-1];
+    }
+
+    return C[k];
+}
+
+int main() {
+    int n, k;
+
+    printf("Enter values of n and k (separated by space): ");
+    scanf("%d %d", &n, &k);
+
+    unsigned long long result = binomial_coefficient(n, k);
+    printf("Binomial Coefficient C(%d, %d) = %llu\n", n, k, result);
+
+    return 0;
+}
