@@ -1,0 +1,77 @@
+#include <stdio.h>
+#include <stdbool.h>
+
+#define MAX_VERTICES 20
+
+int num_vertices;
+int adjacency_matrix[MAX_VERTICES][MAX_VERTICES];
+int color[MAX_VERTICES];
+
+// Function prototypes
+void graphColoring(int vertex);
+bool isSafe(int vertex, int c);
+void printSolution();
+
+// Main function
+int main() {
+    printf("Enter the number of vertices in the graph: ");
+    scanf("%d", &num_vertices);
+
+    printf("Enter the adjacency matrix for the graph:\n");
+    for (int i = 0; i < num_vertices; i++) {
+        for (int j = 0; j < num_vertices; j++) {
+            scanf("%d", &adjacency_matrix[i][j]);
+        }
+    }
+
+    // Initialize all vertices as uncolored
+    for (int i = 0; i < num_vertices; i++) {
+        color[i] = -1; // -1 indicates vertex is not colored
+    }
+
+    // Start coloring from vertex 0
+    graphColoring(0);
+
+    return 0;
+}
+
+// Function to assign colors recursively using backtracking
+void graphColoring(int vertex) {
+    // Base case: If all vertices are colored, print the solution
+    if (vertex == num_vertices) {
+        printSolution();
+        return;
+    }
+
+    // Try different colors for vertex 'vertex'
+    for (int c = 0; c < num_vertices; c++) {
+        if (isSafe(vertex, c)) {
+            color[vertex] = c;
+
+            // Recur to assign colors to rest of the vertices
+            graphColoring(vertex + 1);
+
+            // If assigning color 'c' doesn't lead to a solution, backtrack
+            color[vertex] = -1;
+        }
+    }
+}
+
+// Function to check if it's safe to color 'vertex' with color 'c'
+bool isSafe(int vertex, int c) {
+    for (int i = 0; i < num_vertices; i++) {
+        if (adjacency_matrix[vertex][i] && color[i] == c) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// Function to print the color assignment of each vertex
+void printSolution() {
+    printf("Solution found! Vertex colors are:\n");
+    for (int i = 0; i < num_vertices; i++) {
+        printf("Vertex %d: Color %d\n", i, color[i]);
+    }
+    printf("\n");
+}
