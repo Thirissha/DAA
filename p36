@@ -1,0 +1,69 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX_ITEMS 100
+#define MAX_CONTAINERS 100
+
+// Function to perform First Fit Decreasing (FFD) for bin packing
+void firstFitDecreasing(int items[], int n, int binCapacity)
+{
+    int bins[MAX_CONTAINERS] = {0}; // Array to store remaining space in bins
+    int binCount = 0;               // Number of bins used
+
+    // Place each item into bins using First Fit Decreasing
+    for (int i = 0; i < n; i++)
+    {
+        int j;
+        // Find the first bin that can accommodate items[i]
+        for (j = 0; j < binCount; j++)
+        {
+            if (bins[j] >= items[i])
+            {
+                bins[j] -= items[i]; // Place items[i] into bin j
+                break;
+            }
+        }
+
+        // If no bin could accommodate items[i], create a new bin
+        if (j == binCount)
+        {
+            bins[binCount] = binCapacity - items[i];
+            binCount++;
+        }
+    }
+
+    // Print the number of bins used
+    printf("Number of bins required using First Fit Decreasing: %d\n", binCount);
+}
+
+int main()
+{
+    int items[MAX_ITEMS];
+    int n; // Number of items
+    int binCapacity; // Capacity of each bin
+
+    // Input the number of items and their sizes
+    printf("Enter the number of items: ");
+    scanf("%d", &n);
+
+    if (n > MAX_ITEMS)
+    {
+        printf("Error: Number of items exceeds maximum limit.\n");
+        return 1;
+    }
+
+    printf("Enter the sizes of items:\n");
+    for (int i = 0; i < n; i++)
+    {
+        scanf("%d", &items[i]);
+    }
+
+    // Input the capacity of each bin
+    printf("Enter the capacity of each bin: ");
+    scanf("%d", &binCapacity);
+
+    // Call the First Fit Decreasing function
+    firstFitDecreasing(items, n, binCapacity);
+
+    return 0;
+}
