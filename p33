@@ -1,0 +1,64 @@
+#include <stdio.h>
+#include <stdbool.h>
+
+#define MAX_SIZE 100
+
+// Global variables
+int set[MAX_SIZE];   // Input set
+int subset[MAX_SIZE]; // Current subset being considered
+int n;               // Size of the set
+int targetSum;       // Target sum to achieve
+int sumOfSubset;     // Sum of the current subset
+
+// Function to print the subset that sums up to the target sum
+void processSubset() {
+    printf("{ ");
+    for (int i = 0; i < n; i++) {
+        if (subset[i])
+            printf("%d ", set[i]);
+    }
+    printf("}\n");
+}
+
+// Function to recursively find subsets that sum up to the target sum
+void subsetSum(int index) {
+    if (index == n) { // Base case: reached the end of the set
+        if (sumOfSubset == targetSum)
+            processSubset(); // Print the subset if it sums up to the target sum
+        return;
+    }
+    
+    // Include the current element in the subset
+    subset[index] = 1;
+    sumOfSubset += set[index];
+    subsetSum(index + 1);
+    
+    // Exclude the current element from the subset
+    subset[index] = 0;
+    sumOfSubset -= set[index];
+    subsetSum(index + 1);
+}
+
+int main() {
+    // Input the size of the set
+    printf("Enter the number of elements in the set: ");
+    scanf("%d", &n);
+    
+    // Input the elements of the set
+    printf("Enter the elements of the set:\n");
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &set[i]);
+    }
+    
+    // Input the target sum
+    printf("Enter the target sum: ");
+    scanf("%d", &targetSum);
+    
+    // Initialize variables
+    sumOfSubset = 0;
+    
+    printf("Subsets that sum up to %d are:\n", targetSum);
+    subsetSum(0); // Call the recursive function to find subsets that sum up to the target sum
+    
+    return 0;
+}
