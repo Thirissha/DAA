@@ -1,0 +1,66 @@
+#include <stdio.h>
+#include <limits.h>
+
+#define N 4 // Number of workers (or tasks)
+
+// Function to find minimum cost using Branch and Bound
+int assignmentProblem(int costMatrix[N][N], int assignment[N], int assignedWorker, int totalCost, int level)
+{
+    // Base case: If all workers are assigned a job, return the total cost
+    if (level == N) {
+        return totalCost;
+    }
+
+    int minCost = INT_MAX;
+
+    // Try assigning each job to the current worker and recursively solve the subproblem
+    for (int job = 0; job < N; job++) {
+        // Check if the job is not already assigned
+        if (assignment[job] == -1) {
+            // Mark the job as assigned to the current worker
+            assignment[job] = assignedWorker;
+            // Recursively find the minimum cost for the next level
+            int currentCost = assignmentProblem(costMatrix, assignment, assignedWorker + 1, totalCost + costMatrix[assignedWorker][job], level + 1);
+            // Update minimum cost
+            if (currentCost < minCost) {
+                minCost = currentCost;
+            }
+            // Backtrack: Unmark the job to try another assignment
+            assignment[job] = -1;
+        }
+    }
+
+    return minCost;
+}
+
+// Function to initialize and solve the assignment problem using Branch and Bound
+int solveAssignmentProblem(int costMatrix[N][N])
+{
+    int assignment[N]; // Array to store assignment of jobs to workers
+    for (int i = 0; i < N; i++) {
+        assignment[i] = -1; // Initialize all jobs as not assigned
+    }
+
+    // Call the recursive function to find the minimum cost
+    return assignmentProblem(costMatrix, assignment, 0, 0, 0);
+}
+
+// Main function
+int main()
+{
+    // Example cost matrix (modify this matrix for different problems)
+    int costMatrix[N][N] = {
+        {9, 2, 7, 8},
+        {6, 4, 3, 7},
+        {5, 8, 1, 8},
+        {7, 6, 9, 4}
+    };
+
+    // Solve the assignment problem using Branch and Bound
+    int minCost = solveAssignmentProblem(costMatrix);
+
+    // Print the minimum cost
+    printf("Minimum cost of assignment is: %d\n", minCost);
+
+    return 0;
+}
