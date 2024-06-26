@@ -1,0 +1,61 @@
+#include <stdio.h>
+
+#define MAX_SIZE 100
+
+void insertNumber(int list[], int *size, int number) {
+    int i, j;
+    
+    // Ensure there is space in the list
+    if (*size >= MAX_SIZE) {
+        printf("Error: List is full, cannot insert.\n");
+        return;
+    }
+    
+    // Find the position to insert the number while maintaining sorted order
+    for (i = 0; i < *size; i++) {
+        if (list[i] > number)
+            break;
+    }
+    
+    // Shift elements to the right to make space for the new number
+    for (j = *size; j > i; j--) {
+        list[j] = list[j - 1];
+    }
+    
+    // Insert the number
+    list[i] = number;
+    
+    // Increase the size of the list
+    (*size)++;
+}
+
+int main() {
+    int list[MAX_SIZE];
+    int size = 0;
+    int number, i;
+    
+    // Input the sorted list
+    printf("Enter the sorted list of numbers (maximum %d elements, terminate with -1):\n", MAX_SIZE);
+    while (size < MAX_SIZE) {
+        scanf("%d", &number);
+        if (number == -1)
+            break;
+        list[size++] = number;
+    }
+    
+    // Input the number to insert
+    printf("Enter the number to insert: ");
+    scanf("%d", &number);
+    
+    // Insert the number while maintaining sorted order
+    insertNumber(list, &size, number);
+    
+    // Print the updated list
+    printf("Updated list after insertion:\n");
+    for (i = 0; i < size; i++) {
+        printf("%d ", list[i]);
+    }
+    printf("\n");
+    
+    return 0;
+}
